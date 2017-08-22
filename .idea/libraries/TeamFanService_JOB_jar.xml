@@ -1,0 +1,34 @@
+<component name="libraryTable">
+  <library name="TeamFanService_JOB_jar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/commons-logging-1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/jaxb-impl-2.2.3-1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/jersey-json-1.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/activation-1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/c3p0-0.9.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/jackson-jaxrs-1.7.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/json-20090211.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/commons-codec-1.9.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/stax-api-1.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/jackson-xc-1.7.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/stax-api-1.0-2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/jaxb-api-2.2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/httpclient-4.5.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/jsoup-1.8.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/commons-lang-2.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/jersey-server-1.18.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/quartz-2.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/jackson-mapper-asl-1.7.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/slf4j-api-1.6.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/TeamFanService.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/httpcore-4.4.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/jersey-core-1.18.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/jettison-1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/sqljdbc4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/jackson-core-asl-1.7.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/TeamFanService_JOB_jar/json-simple-1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

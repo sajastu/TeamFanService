@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="TeamFan_archive">
+    <output-path>$PROJECT_DIR$/out/artifacts/TeamFan_archive</output-path>
+    <root id="archive" name="TeamFan_archive.war">
+      <element id="artifact" artifact-name="TeamFan_exploded" />
+    </root>
+  </artifact>
+</component>
