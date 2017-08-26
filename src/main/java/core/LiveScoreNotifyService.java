@@ -52,51 +52,69 @@ public class LiveScoreNotifyService extends TriggerCaller {
     }
 
     private void linkAnalyzer(Element link, String observer_team) throws IOException, JSONException {
-        String host = link.select(".teamname.right").text();
-        String guest = link.select(".teamname.left").text();
-        String host_score = link.select(".score.right").text();
-        String guest_score = link.select(".score.left").text();
-        String start_time = link.select(".start-time").text();
-        String start_date = link.select(".start-date").text();
-        String match_status = link.select(".match-status > .elapsed-time").text();
+        String hostTeamName = link.select(".teamname.right").text();
+        String guestTeamName = link.select(".teamname.left").text();
+        String hostScore = link.select(".score.right").text();
+        String guestScore = link.select(".score.left").text();
+        String startTime = link.select(".start-time").text();
+        String startDate = link.select(".start-date").text();
+        String matchStatus = link.select(".match-status > .elapsed-time").text();
 
         //IF the game is running ...
-        if (!Objects.equals(host_score, "?") && !Objects.equals(match_status, "نتیجه نهایی")) { //TODO
-            Match match = new Match(host, guest, host_score, guest_score, start_date + "T" + start_time);
-            Match match_in_db = DBUtil.getInstance().selectMatch(match, false);
-            if (match_in_db == null){    //if the game has NOT been added already add it to DB
-                DBUtil.getInstance().insertMatch(match, false);
-                System.out.println("Match is inserted in DB now");
-                fillParametersAndFire(match, new Event("","","","","start"));
+        if (!Objects.equals(hostScore, "?") && !Objects.equals(matchStatus, "نتیجه نهایی")) { //TODO
+            Match match = new Match(hostTeamName, guestTeamName, hostScore, guestScore, startDate + "T" + startTime);
+            Match DBMatch = DBUtil.getInstance().selectMatch(match, false);
+            if (DBMatch == null){
+                //if the game has NOT been added already, add it to DB
+                saveAndNotifyGameKickOff(match);
             }
-            else {                 //... if the game has already been added to DB
-                System.out.println("The match already was in DB");
-                if (Integer.parseInt(match_in_db.getHost_score()) < Integer.parseInt(host_score)) {   //live score users should be notified
-                    System.out.println("host team has scored in the last 1 min!");
-                    DBUtil.getInstance().updateFixtures(match);
-                } else if (Integer.parseInt(match_in_db.getQuest_score()) < Integer.parseInt(guest_score)) {
-                    DBUtil.getInstance().updateFixtures(match);
-                    System.out.println("guest team has scored in the last 1 min!");
-                }
-                checkDetailedEvents(link, match);
+            else {
+                //If the game has already been added to DB
+                monitorGameEvents(link, hostScore, guestScore, match, DBMatch);
             }
         }
 
-        //IF the game is over ... Notify the users who have signed up on the corresponding applet
-        else if(Objects.equals(match_status, "نتیجه نهایی"))    //THIS means that the game is over
+        else if(Objects.equals(matchStatus, "نتیجه نهایی"))
         {
-            Match match = new Match(host, guest, host_score, guest_score, start_date + "T" + start_time);
-            fillParametersAndFire(match, new Event("","","","","end"));
-            match.setFinished(true);
-            Match prior_match = DBUtil.getInstance().selectMatch(match, false);
-            if (prior_match != null) {
-                DBUtil.getInstance().updateMatchFinished(match);
-                makeBriefInfoAndFire(match);
-            }
+            //IF the game is over ... Notify the users who have signed up on the corresponding applet
+            //THIS means that the game is over
+            notifyGameTermination(hostTeamName, guestTeamName, hostScore, guestScore, startTime, startDate);
         }
     }
 
-    private void checkDetailedEvents(Element link, Match match) throws IOException, JSONException {
+    private void notifyGameTermination(String hostTeamName, String guestTeamName, String hostScore, String guestScore, String startTime, String startDate) throws JSONException, IOException {
+        Match match = new Match(hostTeamName, guestTeamName, hostScore, guestScore, startDate + "T" + startTime);
+        fillParametersAndFire(match, new Event("","","","","end"));
+        match.setFinished(true);
+        Match prior_match = DBUtil.getInstance().selectMatch(match, false);
+        if (prior_match != null) {
+            DBUtil.getInstance().updateMatchFinished(match);
+            makeBriefInfoAndFire(match);
+        }
+    }
+
+    private void monitorGameEvents(Element link, String hostScore, String guestScore, Match match, Match DBMatch) throws IOException, JSONException {
+        System.out.println("The match already was in DB");
+        if (Integer.parseInt(DBMatch.getHost_score()) < Integer.parseInt(hostScore)) {
+            //live score users should be notified
+            System.out.println("host team has scored in the last 1 min!");
+            DBUtil.getInstance().updateFixtures(match);
+        }
+
+        if (Integer.parseInt(DBMatch.getQuest_score()) < Integer.parseInt(guestScore)) {
+            DBUtil.getInstance().updateFixtures(match);
+            System.out.println("guest team has scored in the last 1 min!");
+        }
+        parseDetailedEvents(link, match);
+    }
+
+    private void saveAndNotifyGameKickOff(Match match) throws JSONException, IOException {
+        DBUtil.getInstance().insertMatch(match, false);
+        System.out.println("Match was not in DB, Now it's added successfullly");
+        fillParametersAndFire(match, new Event("","","","","start"));
+    }
+
+    private void parseDetailedEvents(Element link, Match match) throws IOException, JSONException {
 
         ArrayList<String> sides = new ArrayList<>();
         sides.addAll(Arrays.asList("right", "left"));
@@ -104,23 +122,23 @@ public class LiveScoreNotifyService extends TriggerCaller {
         Event last_event = DBUtil.getInstance().getLastEvent(match);
 
         if (last_event == null){
-            Elements events_until_now = link.select(".match-events-wrapper").select("div[class*=event-]");
-            for (int i=0; i<events_until_now.size(); i++){
-                checkEventAndFire(match, events_until_now, i);
+            Elements eventsTillNow = link.select(".match-events-wrapper").select("div[class*=event-]");
+            for (int i=0; i<eventsTillNow.size(); i++){
+                checkEventAndFire(match, eventsTillNow, i);
             }
         }
         else{
             last_event.setDoer(last_event.getDoer().replace("ي", "ی").replace("ك", "ک"));
-            Elements events_until_now = link.select(".match-events-wrapper").select("div[class*=event-]");
+            Elements eventsTillNow = link.select(".match-events-wrapper").select("div[class*=event-]");
             int index =100;
-            for (int i=0; i<events_until_now.size(); i++){
-                if (Objects.equals(events_until_now.get(i).select(".event-" + last_event.getType() + "." +last_event.getTeamside() + " > span").text(), last_event.getDoer().split("#")[0])
-                        && Objects.equals(events_until_now.get(i).select(".event-" + last_event.getType() + "." +last_event.getTeamside() + " > .occure-time").text(), last_event.getMinute())){
+            for (int i=0; i<eventsTillNow.size(); i++){
+                if (Objects.equals(eventsTillNow.get(i).select(".event-" + last_event.getType() + "." +last_event.getTeamside() + " > span").text(), last_event.getDoer().split("#")[0])
+                        && Objects.equals(eventsTillNow.get(i).select(".event-" + last_event.getType() + "." +last_event.getTeamside() + " > .occure-time").text(), last_event.getMinute())){
                     index = i;
                 }
             }
-            for (int i= index+1; i<events_until_now.size(); i++){
-                checkEventAndFire(match, events_until_now, i);
+            for (int i= index+1; i<eventsTillNow.size(); i++){
+                checkEventAndFire(match, eventsTillNow, i);
             }
         }
     }

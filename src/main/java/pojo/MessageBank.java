@@ -78,7 +78,7 @@ public class MessageBank {
                 break;
 
             default:
-                delivered_msg = "اتفاقاتی در بازی رخ داده است!";
+                delivered_msg = "";
                 break;
 
         }

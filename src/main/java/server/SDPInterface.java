@@ -25,7 +25,7 @@ public class SDPInterface {
     public String getTeamName() throws JSONException {
         // Return some cliched textual content
         JSONArray array = new JSONArray();
-        array.put(getJsonObject("اوساسونا", Configures.teams_persian_name.get(0)));
+        array.put(getJsonObject("بتیس", Configures.teams_persian_name.get(0)));
         array.put(getJsonObject("استقلال", Configures.teams_persian_name.get(1)));
         array.put(getJsonObject("تراکتورسازی", Configures.teams_persian_name.get(2)));
         array.put(getJsonObject("سپاهان", Configures.teams_persian_name.get(3)));
